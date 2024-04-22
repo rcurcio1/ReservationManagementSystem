@@ -34,3 +34,12 @@ istringstream& operator>>(istringstream& input, Event& obj) {
 deque<string> Event::getWaitlist() {
     return waitlist;
 }
+
+void Event::printEvent() {
+    cout<<"Name: "<<<<endl;
+    cout<<"Organizer: "<<<<endl;
+    cout<<"Date: "<<month<<"/"<<day<<endl;
+    cout<<"Time: "<<startTime<<"-"<<endTime<<endl;
+    cout<<"Open to Non-Residents: "<<openToNonResidents<<endl;
+    cout<<"Ticket cost: "<<ticketCost<<endl;
+}
