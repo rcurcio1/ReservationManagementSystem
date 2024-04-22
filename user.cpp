@@ -18,17 +18,17 @@ NonResident::NonResident() { }
 City::City() { }
 
 
-std::istream& operator>>(std::istream& input, Resident& obj) {
+istream& operator>>(istream& input, Resident& obj) {
     input >> obj.username;
     input >> obj.password;
     return input;
 }
-std::istream& operator>>(std::istream& input, NonResident& obj) {
+istream& operator>>(istream& input, NonResident& obj) {
     input >> obj.username;
     input >> obj.password;
     return input;
 }
-std::istream& operator>>(std::istream& input, City& obj) {
+istream& operator>>(istream& input, City& obj) {
     input >> obj.username;
     input >> obj.password;
     return input;
