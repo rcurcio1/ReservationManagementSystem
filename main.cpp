@@ -14,12 +14,12 @@ using namespace std;
 int main() {
     //vector<User*> users = initializeUsers();
     User u1 = Resident("ross", "pword");
-    cout<<j.getPassword()<<endl;
-    cout<<j.getUsername()<<endl;
+    cout<<u1.getPassword()<<endl;
+    cout<<u1.getUsername()<<endl;
 
-    User u2 = NonResident();
+    City u2;
     cin>>u2;
 
-    cout<<u2.getUsername<<endl;
-    cout<<u2.getPassword<<endl;
+    cout<<u2.getUsername()<<endl;
+    cout<<u2.getPassword()<<endl;
 }

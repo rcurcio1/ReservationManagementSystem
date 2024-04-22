@@ -12,6 +12,12 @@ Resident::Resident(string username, string password) : User(username, password) 
 City::City(string username, string password) : User(username, password) { }
 NonResident::NonResident(string username, string password) : User(username, password) { }
 
+User::User() { }
+Resident::Resident() { }
+NonResident::NonResident() { }
+City::City() { }
+
+
 std::istream& operator>>(std::istream& input, Resident& obj) {
     input >> obj.username;
     input >> obj.password;
