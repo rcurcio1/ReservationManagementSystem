@@ -8,3 +8,4 @@ At the beginning of the porgram you will be prompted to login with a username an
 | City      | CityRec  | password |
 | Resident  | rosscurcio | password2 |
 | Non-Resident | joecurcio | password3 |
+| Manager | ccmanager13 | managerpassword |
