@@ -1,6 +1,7 @@
 #include "user.hpp"
 #include "event.hpp"
 #include <vector>
+#include <deque>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -48,7 +49,7 @@ vector<User*> initializeUsers() {
 }
 
 vector<Event*> initalizeEvents() {
-    vector<User*> users;
+    vector<Event*> events;
     ifstream file("events.txt");
     string line;
     while (getline(file, line)) {
@@ -58,7 +59,7 @@ vector<Event*> initalizeEvents() {
         events.push_back(e);
     }
     file.close();
-    return users;
+    return events;
 }
 
 User* login(vector<User*> users) {
@@ -68,7 +69,7 @@ User* login(vector<User*> users) {
     cout<<"Enter username: ";
     cin>>username;
     cout<<"Enter password: ";
-    cin>>pasword;
+    cin>>password;
     for (int i = 0; i < users.size(); i++) {
         User* u = users[i];
         if (u->getUsername() == username and u->getPassword() == password) {
@@ -102,7 +103,7 @@ void run(vector<User*> users, vector<Event*> events) {
         thisUser = login(users);
     }
     if (thisUser->isManager()) {
-        runManager(users, events);
+        //runManager(users, events);
     }
     else {
         while(true) {
@@ -113,11 +114,17 @@ void run(vector<User*> users, vector<Event*> events) {
             switch(choice) {
                 case 1:
                     viewEventSchedule(events);
+                    break;
                 case 2:
+                    break;
                 case 3:
+                    break;
                 case 4:
+                    break;
                 case 5:
+                    break;
                 case 6:
+                    break;
             }
         }
     }
@@ -127,5 +134,7 @@ void run(vector<User*> users, vector<Event*> events) {
 int main() {
     vector<User*> users = initializeUsers();
     vector<Event*> events = initalizeEvents();
-    run(users);
+    deque<string> waitlist = events[0]->getWaitlist();
+    cout<<waitlist.size()<<endl;
+    run(users, events);
 }

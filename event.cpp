@@ -3,7 +3,7 @@
 #include <sstream>
 
 Event::Event() { }
-Event::Event(string m_eventName, User m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, int m_ticketCost, deque<string> m_waitlist) : 
+Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, int m_ticketCost, deque<string> m_waitlist) : 
     eventName(m_eventName),
     organizer(m_organizer),
     month(m_month),
@@ -15,20 +15,22 @@ Event::Event(string m_eventName, User m_organizer, int m_month, int m_day, strin
     waitlist(m_waitlist) { }
 
 
-friend istringstream& operator>>(istringstream& input, Event& obj) {
-    input>>eventName;
-    input>>organizer;
-    input>>month;
-    input>>day;
-    input>>startTime;
-    input>>endTime;
-    input>>openToNonResidents;
-    input>>ticketCost;
-    string waitlistLine;
-    getline(input, waitlistLine);
-    vector<string> = waitlistVector = splitString(waitlistLine);
-    for (int i =0; i waitlistVector.size(); i++) {
-        waitlist.push_back(waitlistVector[i]);
+istringstream& operator>>(istringstream& input, Event& obj) {
+    input>>obj.eventName;
+    input>>obj.organizer;
+    input>>obj.month;
+    input>>obj.day;
+    input>>obj.startTime;
+    input>>obj.endTime;
+    input>>obj.openToNonResidents;
+    input>>obj.ticketCost;
+    string m;
+    while(input>>m) {
+        obj.waitlist.push_back(m);
     }
     return input;
+}
+
+deque<string> Event::getWaitlist() {
+    return waitlist;
 }

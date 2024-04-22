@@ -16,6 +16,14 @@ User::User() { }
 Resident::Resident() { }
 NonResident::NonResident() { }
 City::City() { }
+Manager::Manager() { }
+
+User::~User() { }
+Resident::~Resident() { }
+NonResident::~NonResident() { }
+City::~City() { }
+Manager::~Manager() { }
+
 
 
 istringstream& operator>>(istringstream& input, Resident& obj) {
@@ -41,17 +49,19 @@ string User::getPassword() {
 string User::getUsername() {
     return username;
 }
-
-bool Manager::isManager() override{
+bool User::isManager() { 
+    return false;
+}
+bool Manager::isManager() {
     return true;
 }
-bool City::isManager() override{
-    return true;
+bool City::isManager() {
+    return false;
 }
-bool Resident::isManager() override{
-    return true;
+bool Resident::isManager() {
+    return false;
 }
-bool NonResident::isManager() override{
-    return true;
+bool NonResident::isManager() {
+    return false;
 }
 
