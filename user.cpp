@@ -1,7 +1,7 @@
 #include "user.hpp"
 #include <string>
 #include <vector>
-
+#include <sstream>
 using namespace std;
 
 User::User(string m_username, string m_password) {
@@ -18,17 +18,17 @@ NonResident::NonResident() { }
 City::City() { }
 
 
-istream& operator>>(istream& input, Resident& obj) {
+istringstream& operator>>(istringstream& input, Resident& obj) {
     input >> obj.username;
     input >> obj.password;
     return input;
 }
-istream& operator>>(istream& input, NonResident& obj) {
+istringstream& operator>>(istringstream& input, NonResident& obj) {
     input >> obj.username;
     input >> obj.password;
     return input;
 }
-istream& operator>>(istream& input, City& obj) {
+istringstream& operator>>(istringstream& input, City& obj) {
     input >> obj.username;
     input >> obj.password;
     return input;
