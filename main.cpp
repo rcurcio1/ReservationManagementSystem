@@ -28,7 +28,12 @@ void writeUsers(vector<User*> users) {
     ofstream outfile("users.txt");
     for (int i =0 ; i <users.size(); i++) {
         User* u = users[i];
-        outfile<<u->getSymbol()<<" "<<u->getUsername()<<" "<<u->getPassword()<<endl;
+        outfile<<u->getSymbol()<<" "<<u->getUsername()<<" "<<u->getPassword()<<" "<<u->getCredit();
+        vector<string> tickets = u->getTickets();
+        for (int j=0; j < tickets.size(); j++) {
+            outfile<<" "<<tickets[j];
+        }
+        outfile<<endl;
     }
     outfile.close();
 }

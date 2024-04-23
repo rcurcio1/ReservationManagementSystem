@@ -4,13 +4,15 @@
 #include <sstream>
 using namespace std;
 
-User::User(string m_username, string m_password) {
+User::User(string m_username, string m_password, int m_credit, vector<string> m_tickets) {
     username = m_username;
     password = m_password;
+    credit = m_credit;
+    tickets = m_tickets;
 } 
-Resident::Resident(string username, string password) : User(username, password) { }
-City::City(string username, string password) : User(username, password) { }
-NonResident::NonResident(string username, string password) : User(username, password) { }
+Resident::Resident(string username, string password, int credit, vector<string> tickets) : User(username, password, credit, tickets) { }
+City::City(string username, string password, int credit, vector<string> tickets) : User(username, password, credit, tickets) { }
+NonResident::NonResident(string username, string password, int credit, vector<string> tickets) : User(username, password, credit, tickets) { }
 
 User::User() { }
 Resident::Resident() { }
@@ -29,16 +31,31 @@ Manager::~Manager() { }
 istringstream& operator>>(istringstream& input, Resident& obj) {
     input>>obj.username;
     input>>obj.password;
+    input>>obj.credit;
+    string m;
+    while(input>>m) {
+        obj.tickets.push_back(m);
+    }
     return input;
 }
 istringstream& operator>>(istringstream& input, NonResident& obj) {
     input>>obj.username;
     input>>obj.password;
+    input>>obj.credit;
+    string m;
+    while(input>>m) {
+        obj.tickets.push_back(m);
+    }
     return input;
 }
 istringstream& operator>>(istringstream& input, City& obj) {
     input>>obj.username;
     input>>obj.password;
+    input>>obj.credit;
+    string m;
+    while(input>>m) {
+        obj.tickets.push_back(m);
+    }
     return input;
 }
 

@@ -10,13 +10,17 @@ class User {
 protected:
     string username;
     string password;
-    vector<string*> tickets;
+    int credit;
+    vector<string> tickets;
 public:
     User();
-    User(string username, string password);
+    User(string username, string password, int credit, vector<string> tickets);
     virtual ~User();
     string getUsername();
-    string getPassword();   
+    string getPassword();
+    int getCredit();
+    void changeCredit(int amount); 
+    vector<string> getTickets();
     virtual bool isManager();
     virtual char getSymbol(); 
 };
@@ -24,7 +28,7 @@ public:
 class Resident : public User {
 public:
     Resident();
-    Resident(string username, string password);  
+    Resident(string username, string password, int credit, vector<string> tickets);  
     ~Resident() override;
     friend istringstream& operator>>(istringstream& input, Resident& obj);
     bool isManager() override; 
@@ -34,7 +38,7 @@ public:
 class NonResident : public User {
 public:
     NonResident();
-    NonResident(string username, string password);
+    NonResident(string username, string password, int credit, vector<string> tickets);
     ~NonResident() override;
     friend istringstream& operator>>(istringstream& input, NonResident& obj);
     bool isManager() override;
@@ -44,7 +48,7 @@ public:
 class City : public User {
 public:
     City();
-    City(string username, string password);
+    City(string username, string password, int credit, vector<string> tickets);
     ~City() override;
     friend istringstream& operator>>(istringstream& input, City& obj);
     bool isManager() override;
