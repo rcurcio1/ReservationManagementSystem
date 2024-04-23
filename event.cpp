@@ -43,10 +43,6 @@ istringstream& operator>>(istringstream& input, Event& obj) {
     return input;
 }
 
-deque<string> Event::getWaitlist() {
-    return waitlist;
-}
-
 void Event::printEvent() {
     cout<<"Name: "<<eventName<<endl;
     cout<<"Organizer: "<<organizer<<endl;
@@ -54,4 +50,32 @@ void Event::printEvent() {
     cout<<"Time: "<<startTime<<"-"<<endTime<<endl;
     cout<<"Open to Non-Residents: "<<openToNonResidents<<endl;
     cout<<"Ticket cost: "<<ticketCost<<endl;
+}
+
+string Event::getEventName() {
+    return eventName;
+}
+string Event::getOrganizer() {
+    return organizer;
+}
+int Event::getMonth() {
+    return month;
+}
+int Event::getDay() {
+    return day;
+}
+string Event::getStartTime() {
+    return startTime;
+}
+string Event::getEndTime() {
+    return endTime;
+}
+bool Event::getOpenToNonResidents() {
+    return openToNonResidents;
+}
+int Event::getTicketCost() {
+    return ticketCost;
+}
+deque<string> Event::getWaitlist() {
+    return waitlist;
 }

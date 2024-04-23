@@ -17,7 +17,8 @@ public:
     virtual ~User();
     string getUsername();
     string getPassword();   
-    virtual bool isManager(); 
+    virtual bool isManager();
+    virtual char getSymbol(); 
 };
 
 class Resident : public User {
@@ -27,6 +28,7 @@ public:
     ~Resident() override;
     friend istringstream& operator>>(istringstream& input, Resident& obj);
     bool isManager() override; 
+    char getSymbol() override; 
 };
 
 class NonResident : public User {
@@ -36,6 +38,7 @@ public:
     ~NonResident() override;
     friend istringstream& operator>>(istringstream& input, NonResident& obj);
     bool isManager() override;
+    char getSymbol() override; 
 };
 
 class City : public User {
@@ -45,6 +48,7 @@ public:
     ~City() override;
     friend istringstream& operator>>(istringstream& input, City& obj);
     bool isManager() override;
+    char getSymbol() override; 
 };
 
 class Manager : public User {
@@ -55,6 +59,7 @@ public:
     Manager(string username, string password);
     ~Manager() override;
     bool isManager() override;
+    char getSymbol() override; 
 };
 
 #endif

@@ -11,6 +11,28 @@ using namespace std;
 const string MANAGER_USERNAME = "ccmanager13";
 const string MANAGER_PASSWORD = "managerpassword";
 
+void writeUsers(vector<User*> users) {
+    ofstream outputFile("users.txt");
+    for (int i =0 ; i <users.size(); i++) {
+        User* u = users[i];
+        outfile<<u->getSymbol()<<" "<<u->getUsername()<<" "<<u->getPassword()<<endl;
+    }
+}
+
+void writeEvents(vector<Event*> events) {
+    ofstream outputFile("events.txt");
+    for (int i=0; i < events.size(); i++) {
+        Event* e = events[i];
+        outfile<<u->getEventName()<<" "<<u->getOrganizer()<<" "<<u->getMonth()<<" "<<u->getDay()<<" "
+            <<u->getStartTime()<<" "<<u->getEndTime()<<" "<<u->getOpenToNonResidents()<<" "<<u->getTicketCost();
+        deque<string> waitlist = u->getWaitlist();
+        for (int j=0; j < waitlist.size(); j++) {
+            outfile<<" "<<waitlist[j];
+        }
+        outfile<<endl;
+    }
+}
+
 
 vector<User*> initializeUsers() {
     vector<User*> users;
@@ -97,7 +119,7 @@ void printMenu() {
     cout<<"7. Cancel tickets"<<endl;
 }
 
-void run(vector<User*> users, vector<Event*> events) {
+void run(vector<User*> &users, vector<Event*> &events) {
     User* thisUser = nullptr;
     while(thisUser == nullptr) {
         thisUser = login(users);
@@ -141,4 +163,6 @@ int main() {
     }
     cout<<waitlist.size()<<endl;
     run(users, events);
+    writeUsers(users);
+    writeEvents(events);
 }

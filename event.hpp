@@ -20,9 +20,18 @@ private:
 public:
     Event();
     Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, int m_ticketCost, deque<string> m_waitlist);
-    deque<string> getWaitlist();
     void printEvent();
     friend istringstream& operator>>(istringstream& input, Event& obj);
+    string getEventName();
+    string getOrganizer();
+    int getMonth();
+    int getDay();
+    string getStartTime();
+    string getEndTime();
+    bool getOpenToNonResidents();
+    int getTicketCost();
+    deque<string> getWaitlist();
+
 };
 
 #endif

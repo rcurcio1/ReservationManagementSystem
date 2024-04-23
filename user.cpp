@@ -45,7 +45,6 @@ istringstream& operator>>(istringstream& input, City& obj) {
 string User::getPassword() {
     return password;
 }
-
 string User::getUsername() {
     return username;
 }
@@ -63,5 +62,21 @@ bool Resident::isManager() {
 }
 bool NonResident::isManager() {
     return false;
+}
+
+char User::getSymbol() {
+    return ' ';
+}
+char City::getSymbol() {
+    return 'C';
+}
+char Manager::getSymbol() {
+    return 'M';
+}
+char Resident::getSymbol() {
+    return 'R';
+}
+char NonResident::getSymbol() {
+    return 'N';
 }
 
