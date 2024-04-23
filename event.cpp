@@ -90,6 +90,15 @@ bool Event::getOpenToNonResidents() {
 int Event::getTicketCost() {
     return ticketCost;
 }
+int Event::getTicketsRemaining() {
+    return ticketsRemaining;
+}
+int Event::getAmountOwed() {
+    return amountOwed;
+}
+bool Event::getConfirmed() {
+    return confirmed;
+}
 deque<string> Event::getWaitlist() {
     return waitlist;
 }

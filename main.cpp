@@ -52,7 +52,7 @@ void writeEvents(vector<Event*> events) {
         Event* e = events[i];
         outfile<<e->getEventName()<<" "<<e->getOrganizer()<<" "<<e->getMonth()<<" "<<e->getDay()<<" "
             <<e->getStartTime()<<" "<<e->getEndTime()<<" "<<boolalpha<<e->getOpenToNonResidents()<<" "
-            <<e->getTicketCost()<<" "<<e->getTicketsRemaining()<<" "<<e->getAmountOwed()<<" "<<boolalpha<<getConfirmed();
+            <<e->getTicketCost()<<" "<<e->getTicketsRemaining()<<" "<<e->getAmountOwed()<<" "<<boolalpha<<e->getConfirmed();
         deque<string> waitlist = e->getWaitlist();
         for (int j=0; j < waitlist.size(); j++) {
             outfile<<" "<<waitlist[j];
@@ -152,9 +152,9 @@ void printMenu() {
     cout<<"7. Cancel tickets"<<endl;
 }
 
-void runManager(users, events) {
+void runManager(vector<User*> users, vector<Event*> events) {
     while(true) {
-        printManagerMenu();
+        //printManagerMenu();
         int choice;
         cout<<"Enter your selection: ";
         cin>>choice;
@@ -216,8 +216,9 @@ void run(vector<User*> &users, vector<Event*> &events) {
 int main() {
     vector<User*> users = initializeUsers();
     if (duplicateUsers(users)) {
-        cout<<"Your users.txt file has users with duplicate usernames, please edit that file and try again!"
-        return;
+        cout<<"Your users.txt file has users with duplicate usernames, please edit that file and try again!"<<endl;
+        deleteUsers(users);
+        return 0;
     }
     vector<Event*> events = initalizeEvents();
     events[0]->printEvent();
@@ -230,5 +231,5 @@ int main() {
     writeUsers(users);
     writeEvents(events);
     deleteUsers(users);
-    deleteEvents(events;)
+    deleteEvents(events);
 }
