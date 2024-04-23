@@ -4,6 +4,23 @@
 #include <iostream>
 
 using namespace std;
+
+
+Layout getLayoutFromString(string layoutString) {
+    if (layoutString == "wedding" or layoutString == "Wedding") {
+        return WEDDING;
+    }
+    if (layoutString == "meeting" or layoutString == "Meeting") {
+        return MEETING;
+    }
+    if (layoutString == "lecture" or layoutString == "Lecture") {
+        return LECTURE;
+    }
+    else {
+        return DANCE;
+    }
+}
+
 Event::Event() { }
 Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, 
     string m_endTime, bool m_openToNonResidents, int m_ticketCost, int m_ticketsRemaining, 
@@ -22,20 +39,21 @@ Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, str
     isPrivate(m_private),
     layout(m_layout),
     waitlist(m_waitlist) { }
-
-Layout getLayoutFromString(string layoutString) {
-    if (layoutString == "wedding" or layoutString == "Wedding") {
-        return WEDDING;
-    }
-    if (layoutString == "meeting" or layoutString == "Meeting") {
-        return MEETING;
-    }
-    if (layoutString == "lecture" or layoutString == "Lecture") {
-        return LECTURE;
-    }
-    else {
-        return DANCE;
-    }
+Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_private, 
+    bool m_openToNonResidents,  int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, string layoutString) :
+    eventName(m_eventName),
+    organizer(m_organizer),
+    month(m_month),
+    day(m_day),
+    startTime(m_startTime),
+    endTime(m_endTime),
+    openToNonResidents(m_openToNonResidents),
+    ticketCost(m_ticketCost),
+    ticketsRemaining(m_ticketsRemaining),
+    amountOwed(m_amountOwed),
+    isPrivate(m_private) { 
+        layout = getLayoutFromString(layoutString);
+        confirmed = false;
 }
 
 istringstream& operator>>(istringstream& input, Event& obj) {

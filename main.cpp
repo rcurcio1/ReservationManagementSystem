@@ -174,15 +174,118 @@ void printMenu() {
     cout<<"7. Cancel tickets"<<endl;
 }
 
+bool getBoolFromString(string s) {
+    if (s == "true" or s == "True") {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int getMilitaryTime(string timeString) {
+    if (timeString == "9am") {
+        return 9;
+    }
+    if (timeString == "10am") {
+        return 10;
+    }
+    if (timeString == "11am") {
+        return 11;
+    }
+    if (timeString == "12pm") {
+        return 12;
+    }
+    if (timeString == "1pm") {
+        return 13;
+    }
+    if (timeString == "2pm") {
+        return 14;
+    }
+    if (timeString == "3pm") {
+        return 15;
+    }
+    if (timeString == "4pm") {
+        return 16;
+    }
+    if (timeString == "5pm") {
+        return 17;
+    }
+    if (timeString == "6pm") {
+        return 18;
+    }
+    if (timeString == "7pm") {
+        return 19;
+    }
+    if (timeString == "8pm") {
+        return 20;
+    }
+    if (timeString == "9pm") {
+        return 21;
+    }
+    return 21;
+}
+
+calculateCost(thisUser, startTime, endTime) {
+    int hourly = thisUser.getHourly();
+    int hours = getMilitaryTime(endTime) - getMilitaryTime(startTime);
+    return hourly * hours + 10;
+}
+
 void requestReservation(vector<Event*> &events, User* thisUser) {
     cout<<"Hi, welcome to the reservation request menu, before making a reservation, there are a few things to note:"<<endl;
+    cout<<" -- The facility is open daily from 9am to 9pm"<<endl;
     cout<<" -- Individuals can reserve a maximum of 24 hours in the facility per week"<<endl;
     cout<<" -- Cities can reserve a maximum of 48 hours in the facility per week"<<endl;
     cout<<" -- Prices: $10 non-refundable service charge + $5/hr for cities, $10/hr for residents, $15/hr for"<<endl;
     cout<<"    non-residents"<<endl;
     cout<<" -- Reservations made by individuals over 7 days in advance may be overrode by City reservations"<<endl;
     cout<<"    if they have not been confirmed"<<endl;
-    cout<<" -- To confirm a reservation, it must be paid in full"<<endl;
+    cout<<" -- To confirm a reservation, it must be paid in full or it must be within 7 days of the event"<<endl;
+    cout<<"Enter event name: ";
+    string eventName;
+    cin>>eventName;
+    cout<<"Enter event month (as integer from 1 to 12): ";
+    int month;
+    cin>>month;
+    cout<<"Enter event day (as integer from 1 to 31): ";
+    int day;
+    cin>>day;
+    cout<<"Enter start time (i.e. 11am, 7pm, etc.): "
+    string startTime;
+    cin>>startTime;
+    cout<<"Enter end time (i.e. 11am, 7pm, etc.): "
+    string endTime;
+    cin>>endTime;
+    cout<<"Event private? (true or false) "
+    string privateString;
+    cin>>privateString;
+    bool isPrivate = getBoolFromString(privateString);
+    bool openToNonResidents;
+    if (not isPrivate) {
+        cout<<"Event open to non-residents? (true or false) "
+        string nonResidentsString;
+        cin>>nonResidentsString;
+        openToNonResidents = getBoolFromString(nonResidentsString);
+    }
+    else {
+        openToNonResidents = true;
+    }
+    cout<<"Enter ticket cost (int): "<<endl;
+    int ticketCost;
+    cin>>ticketCost;
+    cout<<"How many tickets would you like available (int, max 25)"<<endl;
+    int ticketCount;
+    cin>>ticketCount;
+    if (ticketCount > 25) {
+        ticketCount = 25;
+    }
+    cout<<"Enter layout for event (wedding, dance, meeting, lecture): "
+    string layoutString;
+    cin>>layoutString;
+    int cost = calculateCost(thisUser, startTime, endTime);
+    Event* e = new Event(eventName, thisUser->getUsername(), month, day, startTime, endTime, isPrivate, openToNonResidents, ticketCost, ticketCount, cost, layoutString);
+    e->printEvent();
 }
 
 

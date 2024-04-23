@@ -23,6 +23,7 @@ public:
     vector<string> getTickets();
     virtual bool isManager();
     virtual char getSymbol(); 
+    virtual int getHourly();
 };
 
 class Resident : public User {
@@ -33,6 +34,7 @@ public:
     friend istringstream& operator>>(istringstream& input, Resident& obj);
     bool isManager() override; 
     char getSymbol() override; 
+    int getHourly() override;
 };
 
 class NonResident : public User {
@@ -43,6 +45,7 @@ public:
     friend istringstream& operator>>(istringstream& input, NonResident& obj);
     bool isManager() override;
     char getSymbol() override; 
+    int getHourly() override;
 };
 
 class City : public User {
@@ -53,6 +56,7 @@ public:
     friend istringstream& operator>>(istringstream& input, City& obj);
     bool isManager() override;
     char getSymbol() override; 
+    int getHourly() override;
 };
 
 class Manager : public User {
@@ -64,6 +68,7 @@ public:
     ~Manager() override;
     bool isManager() override;
     char getSymbol() override; 
+    int getHourly() override;
 };
 
 #endif

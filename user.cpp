@@ -105,3 +105,18 @@ char NonResident::getSymbol() {
     return 'N';
 }
 
+int User::getHourly() {
+    return 0;
+}
+int City::getHourly() {
+    return 5;
+}
+int Resident::getHourly() {
+    return 10;
+}
+int NonResident::getHourly() {
+    return 15;
+}
+int Manager::getHourly() {
+    return 0;
+}
