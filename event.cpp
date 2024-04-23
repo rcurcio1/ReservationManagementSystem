@@ -47,10 +47,7 @@ istringstream& operator>>(istringstream& input, Event& obj) {
         obj.confirmed = false;
     }
     string m;
-    cout<<"here"<<endl;
     while(input>>m) {
-        //input>>m;
-        cout<<"Appending to waitlist"<<endl;
         obj.waitlist.push_back(m);
     }
     return input;
