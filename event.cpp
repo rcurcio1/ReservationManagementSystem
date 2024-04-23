@@ -19,7 +19,7 @@ Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, str
     ticketsRemaining(m_ticketsRemaining),
     amountOwed(m_amountOwed),
     confirmed(m_confirmed),
-    private(m_private),
+    isPrivate(m_private),
     layout(m_layout),
     waitlist(m_waitlist) { }
 
@@ -67,10 +67,10 @@ istringstream& operator>>(istringstream& input, Event& obj) {
     string privateString;
     input>>privateString;
     if (privateString == "true") {
-        obj.private = true;
+        obj.isPrivate = true;
     }
     else {
-        obj.private = false;
+        obj.isPrivate = false;
     }
     string layoutString;
     input>>layoutString;
@@ -88,7 +88,7 @@ void Event::printEvent() {
     cout<<"Date: "<<month<<"/"<<day<<endl;
     cout<<"Time: "<<startTime<<"-"<<endTime<<endl;
     cout<<"Open to Non-Residents: "<<boolalpha<<openToNonResidents<<endl;
-    cout<<"Is Private: "<<boolalpha<<private<<endl;
+    cout<<"Is Private: "<<boolalpha<<isPrivate<<endl;
     cout<<"Ticket cost: "<<ticketCost<<endl;
     cout<<"Tickets remaining: "<<ticketsRemaining<<endl;
 }
@@ -125,6 +125,12 @@ int Event::getAmountOwed() {
 }
 bool Event::getConfirmed() {
     return confirmed;
+}
+bool Event::getPrivate() {
+    return isPrivate;
+}
+Layout Event::getLayout() {
+    return layout;
 }
 deque<string> Event::getWaitlist() {
     return waitlist;

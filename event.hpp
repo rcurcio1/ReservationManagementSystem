@@ -21,7 +21,7 @@ private:
     int ticketsRemaining;
     int amountOwed;
     bool confirmed;
-    bool private;
+    bool isPrivate;
     Layout layout;
     deque<string> waitlist;
 public:
