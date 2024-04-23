@@ -159,6 +159,7 @@ User* login(vector<User*> users) {
 }
 
 void viewEventSchedule(vector<Event*> events) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     for (int i = 0; i < events.size(); i++) {
         Event* e = events[i];
         e->printEvent();
@@ -239,31 +240,39 @@ int getDaysAway(Event* e) {
     if (days < 0) {
         return -1;
     }
-    return days
+    return days;
 }
 
-vector<Event*> removeEvent(vector<Event*> events, Event* e) {
-    auto it = find(events.begin(), events.end(), e);
-    if (it != events.end()) {
-        events.erase(it);
+vector<Event*> removeEvent(vector<Event*> events, Event* rem) {
+    vector<Event*> newEvents;
+    for (int i =0; i < events.size(); i++) {
+        Event* e = events[i];
+        if (e != rem) {
+            newEvents.push_back(e);
+        }
+        else {
+            delete e;
+        }
     }
-    return events;
+    return newEvents;
 }
 
 bool tryReserveEventForCity(vector<Event*> &events, Event* newEvent) {
     for (int i = 0; i < events.size(); i++) {
         Event* e = events[i];
-        if (newEvent->getDay() == e->getDay() and newEvent.getMonth() == e->getMonth()) {
+        if (newEvent->getDay() == e->getDay() and newEvent->getMonth() == e->getMonth()) {
             int newStart = getMilitaryTime(newEvent->getStartTime());
             int newEnd = getMilitaryTime(newEvent->getEndTime());
             int end = getMilitaryTime(e->getEndTime());
             int start = getMilitaryTime(e->getStartTime());
-            if ((newStart < end and newEnd > end) or (newStart < start and newEnd > start) or (newStart > start and newEnd < end)) {
+            if ((newStart < end and newEnd >= end) or (newStart <= start and newEnd > start) or (newStart > start and newEnd < end)) {
                 if (e->getConfirmed() or (not e->getConfirmed() and getDaysAway(e) <= 7)) {
                     e->confirmEvent();
+                    cout<<"Unable to reserve event, overlaps with a confirmed booking"<<endl;
                     return false;
                 }
                 else {
+                    cout<<"Removing event "<<e->getEventName()<<endl;
                     events = removeEvent(events, e);
                     delete e;
                 }
@@ -276,12 +285,13 @@ bool tryReserveEventForCity(vector<Event*> &events, Event* newEvent) {
 bool tryReserveEventForNonCity(vector<Event*> events, Event* newEvent) {
     for (int i = 0; i < events.size(); i++) {
         Event* e = events[i];
-        if (newEvent->getDay() == e->getDay() and newEvent.getMonth() == e->getMonth()) {
+        if (newEvent->getDay() == e->getDay() and newEvent->getMonth() == e->getMonth()) {
             int newStart = getMilitaryTime(newEvent->getStartTime());
             int newEnd = getMilitaryTime(newEvent->getEndTime());
             int end = getMilitaryTime(e->getEndTime());
             int start = getMilitaryTime(e->getStartTime());
-            if ((newStart < end and newEnd > end) or (newStart < start and newEnd > start) or (newStart > start and newEnd < end)) {
+            if ((newStart < end and newEnd >= end) or (newStart <= start and newEnd > start) or (newStart > start and newEnd < end)) {
+                cout<<"Unable to reserve event, overlaps with "<<e->getEventName()<<endl;
                 return false;
             }
         }
@@ -343,15 +353,16 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     int cost = calculateCost(thisUser, startTime, endTime);
     cout<<"COST: $"<<cost<<endl;
     if (10 > thisUser->getCredit()) {
-        cout<<"Sorry you do not have enough money to cover the service charge, please transfer money to your account and try again!";
+        cout<<"Sorry you do not have enough money to cover the service charge, please transfer money to your account and try again!"<<endl;
         return;
     }
     Event* e = new Event(eventName, thisUser->getUsername(), month, day, startTime, endTime, isPrivate, openToNonResidents, ticketCost, ticketCount, cost, layoutString);
     e->printEvent();
-    if (u->getHourly() == 5) {
+    if (thisUser->getHourly() == 5) {
         if(tryReserveEventForCity(events, e)) {
             e->confirmEvent();
             events.push_back(e);
+            cout<<"Event added to reservations and confirmed"<<endl;
         }
         else {
             delete e;
@@ -361,8 +372,10 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     else {
         if(tryReserveEventForNonCity(events, e)) {
             events.push_back(e);
+            cout<<"Event added to reservations"<<endl;
             if (getDaysAway(e) <= 7) {
                 e->confirmEvent();
+                cout<<"Event confirmed"<<endl;
             }
         }
         else {
@@ -372,18 +385,19 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     }
     thisUser->changeCredit(-10);
     e->payOff(10);
-    cout<<"We just charged you the $10 service fee, you owe another "<<e->getAmountOwed()<<", how much";
+    cout<<"We just charged you the $10 service fee, you owe another $"<<e->getAmountOwed()<<", how much";
     cout<<"more would you like to pay now? Reminder that your booking is not confirmed until it is payed off. ";
     int paying;
     cin>>paying;
-    if (paying > thisUser->credit()) {
+    if (paying > thisUser->getCredit()) {
         cout<<"You cannot afford to pay off that much right now. Add credit to your account and pay again from the main menu!";
     }
     else {
         thisUser->changeCredit(-paying);
         e->payOff(paying);
     }
-    if (e->amountOwed() < 0) {
+    if (e->getAmountOwed() < 0) {
+        cout<<"Event confirmed"<<endl;
         e->confirmEvent();
     }
 }

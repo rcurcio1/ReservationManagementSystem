@@ -153,3 +153,9 @@ Layout Event::getLayout() {
 deque<string> Event::getWaitlist() {
     return waitlist;
 }
+void Event::confirmEvent() {
+    confirmed = true;
+}
+void Event::payOff(int i) {
+    amountOwed -= i;
+}

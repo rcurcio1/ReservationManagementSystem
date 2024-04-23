@@ -1,3 +1,3 @@
 C CityRec password 0
-R rosscurcio password2 20 CurcioWedding
+R rosscurcio password2 470 CurcioWedding
 N joecurcio password3 40 CurcioWedding
