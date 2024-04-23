@@ -158,12 +158,43 @@ User* login(vector<User*> users) {
     return nullptr;
 }
 
+bool withinWeek(Event* e) {
+    int month = e->getMonth();
+    int day = e->getDay();
+    if (month == TODAY_MONTH) {
+        return (TODAY_DAY - day <=7) and TODAY_DAY >= day;
+    }
+    else if (month - TODAY_MONTH == 1) {
+        return day + 23 <= TODAY_DAY;
+    }
+    else {
+        return false;
+    }
+}
+
 void viewEventSchedule(vector<Event*> events) {
-    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-    for (int i = 0; i < events.size(); i++) {
-        Event* e = events[i];
-        e->printEvent();
+    cout<<"Would you like to view events for today or for the next week? (Enter 'day or 'week')";
+    string selection;
+    cin>>selection;
+    if (selection == "day") {
         cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+        for (int i = 0; i < events.size(); i++) {
+            Event* e = events[i];
+            if (e->getMonth() == TODAY_MONTH and e->getDay() == TODAY_DAY) {
+                e->printEvent();
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+            }
+        }
+    }
+    else if (selection == "week") {
+        cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+        for (int i = 0; i < events.size(); i++) {
+            Event* e = events[i];
+            if (withinWeek(e)) {
+                e->printEvent();
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+            }
+        }
     }
 }
 
