@@ -48,7 +48,7 @@ void Event::printEvent() {
     cout<<"Organizer: "<<organizer<<endl;
     cout<<"Date: "<<month<<"/"<<day<<endl;
     cout<<"Time: "<<startTime<<"-"<<endTime<<endl;
-    cout<<"Open to Non-Residents: "<<openToNonResidents<<endl;
+    cout<<"Open to Non-Residents: "<<boolalpha<<openToNonResidents<<endl;
     cout<<"Ticket cost: "<<ticketCost<<endl;
 }
 

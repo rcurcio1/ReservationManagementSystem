@@ -12,25 +12,27 @@ const string MANAGER_USERNAME = "ccmanager13";
 const string MANAGER_PASSWORD = "managerpassword";
 
 void writeUsers(vector<User*> users) {
-    ofstream outputFile("users.txt");
+    ofstream outfile("users.txt");
     for (int i =0 ; i <users.size(); i++) {
         User* u = users[i];
         outfile<<u->getSymbol()<<" "<<u->getUsername()<<" "<<u->getPassword()<<endl;
     }
+    outfile.close();
 }
 
 void writeEvents(vector<Event*> events) {
-    ofstream outputFile("events.txt");
+    ofstream outfile("events.txt");
     for (int i=0; i < events.size(); i++) {
         Event* e = events[i];
-        outfile<<u->getEventName()<<" "<<u->getOrganizer()<<" "<<u->getMonth()<<" "<<u->getDay()<<" "
-            <<u->getStartTime()<<" "<<u->getEndTime()<<" "<<u->getOpenToNonResidents()<<" "<<u->getTicketCost();
-        deque<string> waitlist = u->getWaitlist();
+        outfile<<e->getEventName()<<" "<<e->getOrganizer()<<" "<<e->getMonth()<<" "<<e->getDay()<<" "
+            <<e->getStartTime()<<" "<<e->getEndTime()<<" "<<boolalpha<<e->getOpenToNonResidents()<<" "<<e->getTicketCost();
+        deque<string> waitlist = e->getWaitlist();
         for (int j=0; j < waitlist.size(); j++) {
             outfile<<" "<<waitlist[j];
         }
         outfile<<endl;
     }
+    outfile.close();
 }
 
 
@@ -106,7 +108,11 @@ User* login(vector<User*> users) {
 }
 
 void viewEventSchedule(vector<Event*> events) {
-    return;
+    for (int i = 0; i < events.size(); i++) {
+        Event* e = events[i];
+        e->printEvent();
+        cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    }
 }
 
 void printMenu() {
@@ -135,9 +141,9 @@ void run(vector<User*> &users, vector<Event*> &events) {
             cin>>choice;
             switch(choice) {
                 case 1:
-                    viewEventSchedule(events);
-                    break;
+                    return;
                 case 2:
+                    viewEventSchedule(events);
                     break;
                 case 3:
                     break;
