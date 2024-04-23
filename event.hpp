@@ -16,10 +16,14 @@ private:
     string endTime;
     bool openToNonResidents;
     int ticketCost;
+    int ticketsRemaining;
+    int amountOwed;
+    bool confirmed;
     deque<string> waitlist;
 public:
     Event();
-    Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, int m_ticketCost, deque<string> m_waitlist);
+    Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, 
+        int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, int m_confirmed, deque<string> m_waitlist);
     void printEvent();
     friend istringstream& operator>>(istringstream& input, Event& obj);
     string getEventName();
@@ -30,8 +34,12 @@ public:
     string getEndTime();
     bool getOpenToNonResidents();
     int getTicketCost();
+    int getTicketsRemaining();
+    int getAmountOwed();
+    bool getConfirmed();
     deque<string> getWaitlist();
-
+    void confirmEvent();
+    void payOff(int amount);
 };
 
 #endif

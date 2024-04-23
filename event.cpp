@@ -5,7 +5,8 @@
 
 using namespace std;
 Event::Event() { }
-Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, int m_ticketCost, deque<string> m_waitlist) : 
+Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, 
+    string m_endTime, bool m_openToNonResidents, int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, int m_confirmed, deque<string> m_waitlist) : 
     eventName(m_eventName),
     organizer(m_organizer),
     month(m_month),
@@ -14,8 +15,10 @@ Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, str
     endTime(m_endTime),
     openToNonResidents(m_openToNonResidents),
     ticketCost(m_ticketCost),
+    ticketsRemaining(m_ticketsRemaining),
+    amountOwed(m_amountOwed),
+    confirmed(m_confirmed),
     waitlist(m_waitlist) { }
-
 
 istringstream& operator>>(istringstream& input, Event& obj) {
     input>>obj.eventName;
@@ -33,6 +36,16 @@ istringstream& operator>>(istringstream& input, Event& obj) {
         obj.openToNonResidents = false;
     }
     input>>obj.ticketCost;
+    input>>obj.ticketsRemaining;
+    input>>obj.amountOwed;
+    string confirmedString;
+    input>>confirmedString;
+    if (confirmedString == "true") {
+        obj.confirmed = true;
+    }
+    else {
+        obj.confirmed = false;
+    }
     string m;
     cout<<"here"<<endl;
     while(input>>m) {
@@ -50,6 +63,7 @@ void Event::printEvent() {
     cout<<"Time: "<<startTime<<"-"<<endTime<<endl;
     cout<<"Open to Non-Residents: "<<boolalpha<<openToNonResidents<<endl;
     cout<<"Ticket cost: "<<ticketCost<<endl;
+    cout<<"Tickets remaining: "<<ticketsRemaining<<endl;
 }
 
 string Event::getEventName() {
