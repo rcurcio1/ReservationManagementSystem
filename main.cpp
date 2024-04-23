@@ -76,7 +76,7 @@ User* login(vector<User*> users) {
             return u;
         }
     }
-    if (username == "ccmanager" and password == "ccpassword13") {
+    if (username == MANAGER_USERNAME and password == MANAGER_PASSWORD) {
         return new Manager();
     }
     cout<<"Incorrect user and password, try again!";
@@ -134,7 +134,11 @@ void run(vector<User*> users, vector<Event*> events) {
 int main() {
     vector<User*> users = initializeUsers();
     vector<Event*> events = initalizeEvents();
+    events[0]->printEvent();
     deque<string> waitlist = events[0]->getWaitlist();
+    for(int i = 0; i < waitlist.size(); i++) {
+        cout<<waitlist[i]<<endl;
+    }
     cout<<waitlist.size()<<endl;
     run(users, events);
 }
