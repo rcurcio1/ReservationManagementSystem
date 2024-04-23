@@ -10,6 +10,8 @@ using namespace std;
 
 const string MANAGER_USERNAME = "ccmanager13";
 const string MANAGER_PASSWORD = "managerpassword";
+const int TODAY_MONTH = 4;
+const int TODAY_DAY = 23;
 
 
 void deleteUsers(vector<User*> users) {
@@ -232,6 +234,61 @@ int calculateCost(User* thisUser, string startTime, string endTime) {
     return hourly * hours + 10;
 }
 
+int getDaysAway(Event* e) {
+    int days = ((e->getMonth() - TODAY_MONTH) * 30) + (e->getDay() - TODAY_DAY);
+    if (days < 0) {
+        return -1;
+    }
+    return days
+}
+
+vector<Event*> removeEvent(vector<Event*> events, Event* e) {
+    auto it = find(events.begin(), events.end(), e);
+    if (it != events.end()) {
+        events.erase(it);
+    }
+    return events;
+}
+
+bool tryReserveEventForCity(vector<Event*> &events, Event* newEvent) {
+    for (int i = 0; i < events.size(); i++) {
+        Event* e = events[i];
+        if (newEvent->getDay() == e->getDay() and newEvent.getMonth() == e->getMonth()) {
+            int newStart = getMilitaryTime(newEvent->getStartTime());
+            int newEnd = getMilitaryTime(newEvent->getEndTime());
+            int end = getMilitaryTime(e->getEndTime());
+            int start = getMilitaryTime(e->getStartTime());
+            if ((newStart < end and newEnd > end) or (newStart < start and newEnd > start) or (newStart > start and newEnd < end)) {
+                if (e->getConfirmed() or (not e->getConfirmed() and getDaysAway(e) <= 7)) {
+                    e->confirmEvent();
+                    return false;
+                }
+                else {
+                    events = removeEvent(events, e);
+                    delete e;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool tryReserveEventForNonCity(vector<Event*> events, Event* newEvent) {
+    for (int i = 0; i < events.size(); i++) {
+        Event* e = events[i];
+        if (newEvent->getDay() == e->getDay() and newEvent.getMonth() == e->getMonth()) {
+            int newStart = getMilitaryTime(newEvent->getStartTime());
+            int newEnd = getMilitaryTime(newEvent->getEndTime());
+            int end = getMilitaryTime(e->getEndTime());
+            int start = getMilitaryTime(e->getStartTime());
+            if ((newStart < end and newEnd > end) or (newStart < start and newEnd > start) or (newStart > start and newEnd < end)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void requestReservation(vector<Event*> &events, User* thisUser) {
     cout<<"Hi, welcome to the reservation request menu, before making a reservation, there are a few things to note:"<<endl;
     cout<<" -- The facility is open daily from 9am to 9pm"<<endl;
@@ -285,8 +342,50 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     cin>>layoutString;
     int cost = calculateCost(thisUser, startTime, endTime);
     cout<<"COST: $"<<cost<<endl;
+    if (10 > thisUser->getCredit()) {
+        cout<<"Sorry you do not have enough money to cover the service charge, please transfer money to your account and try again!";
+        return;
+    }
     Event* e = new Event(eventName, thisUser->getUsername(), month, day, startTime, endTime, isPrivate, openToNonResidents, ticketCost, ticketCount, cost, layoutString);
     e->printEvent();
+    if (u->getHourly() == 5) {
+        if(tryReserveEventForCity(events, e)) {
+            e->confirmEvent();
+            events.push_back(e);
+        }
+        else {
+            delete e;
+            return;
+        }
+    }
+    else {
+        if(tryReserveEventForNonCity(events, e)) {
+            events.push_back(e);
+            if (getDaysAway(e) <= 7) {
+                e->confirmEvent();
+            }
+        }
+        else {
+            delete e;
+            return;
+        }
+    }
+    thisUser->changeCredit(-10);
+    e->payOff(10);
+    cout<<"We just charged you the $10 service fee, you owe another "<<e->getAmountOwed()<<", how much";
+    cout<<"more would you like to pay now? Reminder that your booking is not confirmed until it is payed off. ";
+    int paying;
+    cin>>paying;
+    if (paying > thisUser->credit()) {
+        cout<<"You cannot afford to pay off that much right now. Add credit to your account and pay again from the main menu!";
+    }
+    else {
+        thisUser->changeCredit(-paying);
+        e->payOff(paying);
+    }
+    if (e->amountOwed() < 0) {
+        e->confirmEvent();
+    }
 }
 
 
