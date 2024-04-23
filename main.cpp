@@ -226,8 +226,8 @@ int getMilitaryTime(string timeString) {
     return 21;
 }
 
-calculateCost(thisUser, startTime, endTime) {
-    int hourly = thisUser.getHourly();
+int calculateCost(User* thisUser, string startTime, string endTime) {
+    int hourly = thisUser->getHourly();
     int hours = getMilitaryTime(endTime) - getMilitaryTime(startTime);
     return hourly * hours + 10;
 }
@@ -251,19 +251,19 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     cout<<"Enter event day (as integer from 1 to 31): ";
     int day;
     cin>>day;
-    cout<<"Enter start time (i.e. 11am, 7pm, etc.): "
+    cout<<"Enter start time (i.e. 11am, 7pm, etc.): ";
     string startTime;
     cin>>startTime;
-    cout<<"Enter end time (i.e. 11am, 7pm, etc.): "
+    cout<<"Enter end time (i.e. 11am, 7pm, etc.): ";
     string endTime;
     cin>>endTime;
-    cout<<"Event private? (true or false) "
+    cout<<"Event private? (true or false) ";
     string privateString;
     cin>>privateString;
     bool isPrivate = getBoolFromString(privateString);
     bool openToNonResidents;
     if (not isPrivate) {
-        cout<<"Event open to non-residents? (true or false) "
+        cout<<"Event open to non-residents? (true or false) ";
         string nonResidentsString;
         cin>>nonResidentsString;
         openToNonResidents = getBoolFromString(nonResidentsString);
@@ -271,19 +271,20 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     else {
         openToNonResidents = true;
     }
-    cout<<"Enter ticket cost (int): "<<endl;
+    cout<<"Enter ticket cost (int): ";
     int ticketCost;
     cin>>ticketCost;
-    cout<<"How many tickets would you like available (int, max 25)"<<endl;
+    cout<<"How many tickets would you like available (int, max 25): ";
     int ticketCount;
     cin>>ticketCount;
     if (ticketCount > 25) {
         ticketCount = 25;
     }
-    cout<<"Enter layout for event (wedding, dance, meeting, lecture): "
+    cout<<"Enter layout for event (wedding, dance, meeting, lecture): ";
     string layoutString;
     cin>>layoutString;
     int cost = calculateCost(thisUser, startTime, endTime);
+    cout<<"COST: $"<<cost<<endl;
     Event* e = new Event(eventName, thisUser->getUsername(), month, day, startTime, endTime, isPrivate, openToNonResidents, ticketCost, ticketCount, cost, layoutString);
     e->printEvent();
 }

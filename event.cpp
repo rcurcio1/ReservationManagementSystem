@@ -24,7 +24,7 @@ Layout getLayoutFromString(string layoutString) {
 Event::Event() { }
 Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, 
     string m_endTime, bool m_openToNonResidents, int m_ticketCost, int m_ticketsRemaining, 
-    int m_amountOwed, int m_confirmed, bool m_private, Layout m_layout, deque<string> m_waitlist) : 
+    int m_amountOwed, bool m_confirmed, bool m_private, Layout m_layout, deque<string> m_waitlist) : 
     eventName(m_eventName),
     organizer(m_organizer),
     month(m_month),
@@ -39,7 +39,7 @@ Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, str
     isPrivate(m_private),
     layout(m_layout),
     waitlist(m_waitlist) { }
-Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_private, 
+Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_private, 
     bool m_openToNonResidents,  int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, string layoutString) :
     eventName(m_eventName),
     organizer(m_organizer),
