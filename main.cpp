@@ -232,6 +232,7 @@ int main() {
         cout<<waitlist[i]<<endl;
     }
     cout<<waitlist.size()<<endl;
+    cout<<users[2]->getTickets()[0]<<endl;
     run(users, events);
     writeUsers(users);
     writeEvents(events);

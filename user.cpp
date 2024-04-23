@@ -58,7 +58,15 @@ istringstream& operator>>(istringstream& input, City& obj) {
     }
     return input;
 }
-
+int User::getCredit() {
+    return credit;
+}
+void User::changeCredit(int amount) {
+    credit += amount;
+}
+vector<string> User::getTickets() {
+    return tickets;
+}
 string User::getPassword() {
     return password;
 }
