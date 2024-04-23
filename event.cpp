@@ -6,7 +6,8 @@
 using namespace std;
 Event::Event() { }
 Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, 
-    string m_endTime, bool m_openToNonResidents, int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, int m_confirmed, deque<string> m_waitlist) : 
+    string m_endTime, bool m_openToNonResidents, int m_ticketCost, int m_ticketsRemaining, 
+    int m_amountOwed, int m_confirmed, bool m_private, Layout m_layout, deque<string> m_waitlist) : 
     eventName(m_eventName),
     organizer(m_organizer),
     month(m_month),
@@ -18,7 +19,24 @@ Event::Event(string m_eventName, string m_organizer, int m_month, int m_day, str
     ticketsRemaining(m_ticketsRemaining),
     amountOwed(m_amountOwed),
     confirmed(m_confirmed),
+    private(m_private),
+    layout(m_layout),
     waitlist(m_waitlist) { }
+
+Layout getLayoutFromString(string layoutString) {
+    if (layoutString == "wedding" or layoutString == "Wedding") {
+        return WEDDING;
+    }
+    if (layoutString == "meeting" or layoutString == "Meeting") {
+        return MEETING;
+    }
+    if (layoutString == "lecture" or layoutString == "Lecture") {
+        return LECTURE;
+    }
+    else {
+        return DANCE;
+    }
+}
 
 istringstream& operator>>(istringstream& input, Event& obj) {
     input>>obj.eventName;
@@ -46,6 +64,17 @@ istringstream& operator>>(istringstream& input, Event& obj) {
     else {
         obj.confirmed = false;
     }
+    string privateString;
+    input>>privateString;
+    if (privateString == "true") {
+        obj.private = true;
+    }
+    else {
+        obj.private = false;
+    }
+    string layoutString;
+    input>>layoutString;
+    obj.layout = getLayoutFromString(layoutString);
     string m;
     while(input>>m) {
         obj.waitlist.push_back(m);
@@ -59,6 +88,7 @@ void Event::printEvent() {
     cout<<"Date: "<<month<<"/"<<day<<endl;
     cout<<"Time: "<<startTime<<"-"<<endTime<<endl;
     cout<<"Open to Non-Residents: "<<boolalpha<<openToNonResidents<<endl;
+    cout<<"Is Private: "<<boolalpha<<private<<endl;
     cout<<"Ticket cost: "<<ticketCost<<endl;
     cout<<"Tickets remaining: "<<ticketsRemaining<<endl;
 }

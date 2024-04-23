@@ -51,13 +51,30 @@ bool duplicateUsers(vector<User*> users) {
     return false;
 }
 
+string getStringFromLayout(Layout l) {
+    if (l == WEDDING) {
+        return "wedding";
+    }
+    if (l == LECTURE) {
+        return "lecture";
+    }
+    if (l == MEETING) {
+        return "meeting";
+    }
+    else {
+        return "dance";
+    }
+}
+
 void writeEvents(vector<Event*> events) {
     ofstream outfile("events.txt");
     for (int i=0; i < events.size(); i++) {
         Event* e = events[i];
+        string layoutString = getStringFromLayout(e->getLayout());
         outfile<<e->getEventName()<<" "<<e->getOrganizer()<<" "<<e->getMonth()<<" "<<e->getDay()<<" "
             <<e->getStartTime()<<" "<<e->getEndTime()<<" "<<boolalpha<<e->getOpenToNonResidents()<<" "
-            <<e->getTicketCost()<<" "<<e->getTicketsRemaining()<<" "<<e->getAmountOwed()<<" "<<boolalpha<<e->getConfirmed();
+            <<e->getTicketCost()<<" "<<e->getTicketsRemaining()<<" "<<e->getAmountOwed()<<" "
+            <<boolalpha<<e->getConfirmed()<<" "<<e->getPrivate()<<" "<<layoutString;
         deque<string> waitlist = e->getWaitlist();
         for (int j=0; j < waitlist.size(); j++) {
             outfile<<" "<<waitlist[j];
@@ -157,6 +174,18 @@ void printMenu() {
     cout<<"7. Cancel tickets"<<endl;
 }
 
+void requestReservation(vector<Event*> &events, User* thisUser) {
+    cout<<"Hi, welcome to the reservation request menu, before making a reservation, there are a few things to note:"<<endl;
+    cout<<" -- Individuals can reserve a maximum of 24 hours in the facility per week"<<endl;
+    cout<<" -- Cities can reserve a maximum of 48 hours in the facility per week"<<endl;
+    cout<<" -- Prices: $10 non-refundable service charge + $5/hr for cities, $10/hr for residents, $15/hr for"<<endl;
+    cout<<"    non-residents"<<endl;
+    cout<<" -- Reservations made by individuals over 7 days in advance may be overrode by City reservations"<<endl;
+    cout<<"    if they have not been confirmed"<<endl;
+    cout<<" -- To confirm a reservation, it must be paid in full"<<endl;
+}
+
+
 void runManager(vector<User*> users, vector<Event*> events) {
     while(true) {
         //printManagerMenu();
@@ -203,6 +232,7 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     viewEventSchedule(events);
                     break;
                 case 3:
+                    requestReservation(events, thisUser);
                     break;
                 case 4:
                     break;

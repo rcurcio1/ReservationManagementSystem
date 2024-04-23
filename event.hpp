@@ -5,6 +5,8 @@
 #define EVENT_H
 using namespace std;
 
+enum Layout{MEETING, LECTURE, WEDDING, DANCE};
+
 
 class Event {
 private:
@@ -19,11 +21,13 @@ private:
     int ticketsRemaining;
     int amountOwed;
     bool confirmed;
+    bool private;
+    Layout layout;
     deque<string> waitlist;
 public:
     Event();
     Event(string m_eventName, string m_organizer, int m_month, int m_day, string m_startTime, string m_endTime, bool m_openToNonResidents, 
-        int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, int m_confirmed, deque<string> m_waitlist);
+        int m_ticketCost, int m_ticketsRemaining, int m_amountOwed, int m_confirmed, bool m_private, Layout m_layout, deque<string> m_waitlist);
     void printEvent();
     friend istringstream& operator>>(istringstream& input, Event& obj);
     string getEventName();
@@ -37,6 +41,8 @@ public:
     int getTicketsRemaining();
     int getAmountOwed();
     bool getConfirmed();
+    bool getPrivate();
+    Layout getLayout();
     deque<string> getWaitlist();
     void confirmEvent();
     void payOff(int amount);
