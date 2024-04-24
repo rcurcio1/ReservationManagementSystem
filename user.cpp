@@ -128,3 +128,6 @@ void User::removeTicket(string t) {
 void User::addTicket(string t) {
     tickets.push_back(t);
 }
+bool User::hasTicket(string t) {
+    return find(tickets.begin(), tickets.end(), t) != tickets.end();
+}

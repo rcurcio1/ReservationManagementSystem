@@ -527,10 +527,52 @@ void cancelEvent(vector<Event*> &events, vector<User*> users, User* thisUser) {
         }
     }
 }
+void buyTickets(vector<Event*> events, User* thisUser) {
+    if (thisUser->getHourly() == 5) {
+        cout<<"Cannot buy tickets as a City user!"<<endl;
+        return;
+    }
+    for (Event* e: events) {
+        if (not e->getPrivate() and not thisUser->hasTicket(e->getEventName()) and not (thisUser->getHourly() == 15 and not e->getOpenToNonResidents())) {
+            cout<<"Would you like to buy a ticket to "<<e->getEventName()<<" on "<<
+            e->getMonth()<<"/"<<e->getDay()<<" from "<<e->getStartTime()<<" to "<<e->getEndTime()<<" for $"<<e->getTicketCost<<"? (yes or no) ";
+            string choice;
+            cin>>choice;
+            if (choice == "yes") {
+                if (e->getTicketsRemaining() == 0) {
+                    cout<<"No tickets remaining, adding you to waitlist. Make sure you have $"<<e->getTicketCost()<<" in credit so
+                        we can get you a ticket as soon as a spot opens up!"<<endl;
+                    e->addToWaitlist(thisUser->getUsername());
+                }
+                else if (thisUser->getCredit() >= e->getTicketCost()) {
+                    thisUser->addTicket(e->getEventName());
+                    thisUser->changeCredit(-e->getTicketCost());
+                    e->sellTicket();
+                }
+                else {
+                    cout<<"Sorry, you do not have enough credit to buy this ticket!"<<endl;
+                }
+            }
+        }
+    }
+}
+void buyTickets(vector<Event*> events, User* thisUser) {
+    if (thisUser->getHourly() == 10) {
+        buyTicketsAsResident(events, thisUser);
+    }
+    else if (thisUser->getHourly() ==  15) {
+        buyTicketsAsNonResident(events, thisUser);
+    }
+    else {
+        cout<<"Cannot buy tickets as a City user"<<endl;
+    }
+}
 
  
 
-void printMenu() {
+void printMenu(User* thisUser) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"CREDIT: $"<<thisUser->getCredit()<<endl;
     cout<<"1. Quit program"<<endl;
     cout<<"2. View event schedule"<<endl;
     cout<<"3. Request reservation"<<endl;
@@ -551,7 +593,7 @@ void run(vector<User*> &users, vector<Event*> &events) {
     }
     else {
         while(true) {
-            printMenu();
+            printMenu(thisUser);
             int choice;
             cout<<"Enter your selection: ";
             cin>>choice;
@@ -571,8 +613,10 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     cancelEvent(events, users, thisUser);
                     break;
                 case 6:
+                    buyTickets(events, thisUser);
                     break;
                 case 7:
+                    sellTickets();
                     break;
                 case 8:
                     transferMoney(thisUser);

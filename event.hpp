@@ -46,8 +46,11 @@ public:
     bool getPrivate();
     Layout getLayout();
     deque<string> getWaitlist();
+    string removeFromWaitlist();
+    void addToWaitlist(string t);
     void confirmEvent();
     void payOff(int amount);
+    void sellTicket();
 };
 
 #endif

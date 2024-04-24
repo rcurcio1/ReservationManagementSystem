@@ -162,3 +162,15 @@ void Event::payOff(int i) {
         amountOwed = 0;
     }
 }
+string Event::removeFromWaitlist() {
+    string removed = waitlist.front();
+    waitlist.pop_front();
+    return removed;
+}
+void Event::addToWaitlist(string t) {
+    waitlist.push_back(t);
+}
+
+void Event::sellTicket() {
+    ticketsRemaining--;
+}

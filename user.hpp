@@ -23,6 +23,7 @@ public:
     vector<string> getTickets();
     void removeTicket(string t);
     void addTicket(string t);
+    bool hasTicket(string t);
     virtual bool isManager();
     virtual char getSymbol(); 
     virtual int getHourly();
