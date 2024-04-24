@@ -1,3 +1,4 @@
+CurcioWedding joecurcio 4 28 7pm 9pm false 5 0 0 true true wedding rosscurcio jawn
 AssignmentDue rosscurcio 4 23 10am 8pm false 0 0 0 true true lecture
 Birthday rosscurcio 7 29 6pm 7pm true 10 20 0 true true dance
 Wednesday joecurcio 4 24 9am 9pm true 0 25 150 true false dance

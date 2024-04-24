@@ -516,7 +516,7 @@ void cancelEvent(vector<Event*> &events, vector<User*> users, User* thisUser) {
                 for (User* u : users) {
                     vector<string> tickets = u->getTickets();
                     if (find(tickets.begin(), tickets.end(), e->getEventName()) != tickets.end()) {
-                        tickets.erase(find(tickets.begin(), tickets.end(), e->getEventName()));
+                        u->removeTicket(e->getEventName());
                         u->changeCredit(e->getTicketCost());
                     }
                 }

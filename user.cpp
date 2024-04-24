@@ -120,3 +120,10 @@ int NonResident::getHourly() {
 int Manager::getHourly() {
     return 0;
 }
+
+void User::removeTicket(string t) {
+    tickets.erase(find(tickets.begin(), tickets.end(), t));
+}
+void User::addTicket(string t) {
+    tickets.push_back(t);
+}
