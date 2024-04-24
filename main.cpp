@@ -592,13 +592,6 @@ int main() {
         return 0;
     }
     vector<Event*> events = initalizeEvents();
-    events[0]->printEvent();
-    deque<string> waitlist = events[0]->getWaitlist();
-    for(int i = 0; i < waitlist.size(); i++) {
-        cout<<waitlist[i]<<endl;
-    }
-    cout<<waitlist.size()<<endl;
-    cout<<users[2]->getTickets()[0]<<endl;
     run(users, events);
     writeUsers(users);
     writeEvents(events);
