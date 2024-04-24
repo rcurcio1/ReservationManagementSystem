@@ -183,7 +183,7 @@ bool withinWeek(Event* e) {
 void viewEventSchedule(vector<Event*> events) {
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-    cout<<"Would you like to view events for today, the next week, or all events? (Enter 'day', 'week', or 'all')";
+    cout<<"Would you like to view events for today, the next week, or all events? (Enter 'day', 'week', or 'all') ";
     string selection;
     cin>>selection;
     if (selection == "day") {
@@ -191,6 +191,7 @@ void viewEventSchedule(vector<Event*> events) {
             Event* e = events[i];
             cout<<e->getMonth()<<" "<<e->getDay()<<endl;
             if (e->getMonth() == TODAY_MONTH and e->getDay() == TODAY_DAY) {
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
                 e->printEvent();
                 cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
             }
@@ -476,6 +477,8 @@ void makePayment(vector<Event*> events, User* thisUser) {
                 }
             }
             else {
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
                 cout<<"You do not have enough credit to pay that off. You have $"<<thisUser->getCredit()<<" in credit."<<endl;
             }
         }
