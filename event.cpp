@@ -158,4 +158,7 @@ void Event::confirmEvent() {
 }
 void Event::payOff(int i) {
     amountOwed -= i;
+    if (amountOwed < 0) {
+        amountOwed = 0;
+    }
 }

@@ -459,6 +459,29 @@ void runManager(vector<User*> users, vector<Event*> events) {
     }
 }
 
+void makePayment(vector<Event*> events, User* thisUser) {
+    for (Event* e: events) {
+        if (e->getOrganizer() == thisUser->getUsername() and e->amountOwed() > 0) {
+            cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+            cout<<"You owe $"<<e->amountOwed()<<" for the event "<<e->eventName()<<"."<<endl;
+            cout<<"How much of that amount would you like to pay off? ";
+            int pay;
+            cin>>pay;
+            if (pay <= thisUser->credit()) {
+                thisUser->changeCredit(-pay);
+                e->payOff(pay);
+                if (e->amountOwed() == 0) {
+                    e->confirmEvent();
+                    cout<<"Event fully payed off and confirmed!"<<endl;
+                }
+            }
+            else {
+                "You do not have enough credit to pay that off. You have $"<<thisUser->getCredit()<<" in credit."<<endl;
+            }
+        }
+    }
+}
+
 
 void run(vector<User*> &users, vector<Event*> &events) {
     User* thisUser = nullptr;
@@ -484,6 +507,7 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     requestReservation(events, thisUser);
                     break;
                 case 4:
+                    makePayment(events, thisUser);
                     break;
                 case 5:
                     break;
