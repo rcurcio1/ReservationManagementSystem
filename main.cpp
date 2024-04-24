@@ -162,7 +162,7 @@ bool withinWeek(Event* e) {
     int month = e->getMonth();
     int day = e->getDay();
     if (month == TODAY_MONTH) {
-        return (TODAY_DAY - day <=7) and TODAY_DAY >= day;
+        return (day - TODAY_DAY <=7) and TODAY_DAY <= day;
     }
     else if (month - TODAY_MONTH == 1) {
         return day + 23 <= TODAY_DAY;
@@ -180,6 +180,7 @@ void viewEventSchedule(vector<Event*> events) {
         cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
         for (int i = 0; i < events.size(); i++) {
             Event* e = events[i];
+            cout<<e->getMonth()<<" "<<e->getDay()<<endl;
             if (e->getMonth() == TODAY_MONTH and e->getDay() == TODAY_DAY) {
                 e->printEvent();
                 cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
