@@ -401,7 +401,6 @@ void requestReservation(vector<Event*> &events, vector<User*> users, User* thisU
     string layoutString;
     cin>>layoutString;
     int cost = calculateCost(thisUser, startTime, endTime);
-    cout<<"COST: $"<<cost<<endl;
     if (10 > thisUser->getCredit()) {
         cout<<"Sorry you do not have enough money to cover the service charge, please transfer money to your account and try again!"<<endl;
         return;
