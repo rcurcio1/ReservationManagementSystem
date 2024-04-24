@@ -51,6 +51,7 @@ public:
     void confirmEvent();
     void payOff(int amount);
     void sellTicket();
+    void returnTicket();
 };
 
 #endif

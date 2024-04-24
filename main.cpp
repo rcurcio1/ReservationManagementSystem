@@ -556,6 +556,48 @@ void buyTickets(vector<Event*> events, User* thisUser) {
     }
 }
 
+bool giveUserTicket(vector<User*> users, Event* e, string waitlistUser) {
+    for (User* u : users) {
+        if (u->getUsername() == waitlistUser) {
+            if (e->getCredit() >= e->getTicketCost()) {
+                u->addTicket(e->getEventName());
+                u->changeCredit(e->getTicketCost());
+                e->sellTicket();
+                return true;
+            }
+            else {
+                cout<<"Unable to give "<<e->getUsername()<<" their ticket from wailist (insufficient funds)!"<<endl;
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
+void sellTickets(vector<Event*> events, vector<User*> users, User* thisUser) {
+    for (Event* e: events) {
+        if (thisUser->hasTicket(e->getEventName())) {
+            cout<<"Would you like to sell your ticket to "<<e->getEventName()<<" on "<<
+            e->getMonth()<<"/"<<e->getDay()<<" from "<<e->getStartTime()<<" to "<<
+            e->getEndTime()<<" for $"<<e->getTicketCost()<<"? (yes or no) ";
+            string choice;
+            cin>>choice;
+            if (choice == "yes") {
+                thisUser->removeTicket(e->getEventName());
+                thisUser->changeCredit(e->getTicketCost);
+                e->returnTicket();
+                if (e->getWaitlist().size() > 0) {
+                    bool foundWaitlistUser = false;
+                    while(!foundWaitlistUser and e->getWaitlist().size() > 0) {
+                        string waitlistUser = e->removeFromWaitlist();
+                        foundWaitlistUser = giveUserTicket(users, e, waitlistUser);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void printMenu(User* thisUser) {
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"CREDIT: $"<<thisUser->getCredit()<<endl;
@@ -567,18 +609,17 @@ void printMenu(User* thisUser) {
     cout<<"6. Purchase tickets"<<endl;
     cout<<"7. Cancel tickets"<<endl;
     cout<<"8. Transfer money into account"<<endl;
+    cout<<"9. Logout"<<endl;
 }
 
 void run(vector<User*> &users, vector<Event*> &events) {
-    User* thisUser = nullptr;
-    while(thisUser == nullptr) {
-        thisUser = login(users);
-    }
-    if (thisUser->isManager()) {
-        runManager(users, events);
-    }
-    else {
-        while(true) {
+    while(true) {
+        User* thisUser = nullptr;
+        while(thisUser == nullptr) {
+            thisUser = login(users);
+        }
+        bool loggedIn = true;
+        while(loggedIn) {
             printMenu(thisUser);
             int choice;
             cout<<"Enter your selection: ";
@@ -602,10 +643,12 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     buyTickets(events, thisUser);
                     break;
                 case 7:
-                    //sellTickets();
+                    sellTickets();
                     break;
                 case 8:
                     transferMoney(thisUser);
+                case 9:
+                    loggedIn = false;
             }
         }
     }

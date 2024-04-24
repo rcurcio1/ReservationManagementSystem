@@ -174,3 +174,8 @@ void Event::addToWaitlist(string t) {
 void Event::sellTicket() {
     ticketsRemaining--;
 }
+
+void Event::returnTicket() {
+    ticketsRemaining++;
+}
+
