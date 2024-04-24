@@ -417,8 +417,8 @@ void requestReservation(vector<Event*> &events, User* thisUser) {
     }
     thisUser->changeCredit(-10);
     e->payOff(10);
-    cout<<"We just charged you the $10 service fee, you owe another $"<<e->getAmountOwed()<<", how much";
-    cout<<"more would you like to pay now? Reminder that your booking is not confirmed until it is payed off. ";
+    cout<<"We just charged you the $10 service fee, you owe another $"<<e->getAmountOwed()<<", how much more"<<endl;
+    cout<<"would you like to pay now? Reminder that your booking is not confirmed until it is payed off. ";
     int paying;
     cin>>paying;
     if (paying > thisUser->getCredit()) {
@@ -461,22 +461,22 @@ void runManager(vector<User*> users, vector<Event*> events) {
 
 void makePayment(vector<Event*> events, User* thisUser) {
     for (Event* e: events) {
-        if (e->getOrganizer() == thisUser->getUsername() and e->amountOwed() > 0) {
+        if (e->getOrganizer() == thisUser->getUsername() and e->getAmountOwed() > 0) {
             cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-            cout<<"You owe $"<<e->amountOwed()<<" for the event "<<e->eventName()<<"."<<endl;
+            cout<<"You owe $"<<e->getAmountOwed()<<" for the event "<<e->getEventName()<<"."<<endl;
             cout<<"How much of that amount would you like to pay off? ";
             int pay;
             cin>>pay;
-            if (pay <= thisUser->credit()) {
+            if (pay <= thisUser->getCredit()) {
                 thisUser->changeCredit(-pay);
                 e->payOff(pay);
-                if (e->amountOwed() == 0) {
+                if (e->getAmountOwed() == 0) {
                     e->confirmEvent();
                     cout<<"Event fully payed off and confirmed!"<<endl;
                 }
             }
             else {
-                "You do not have enough credit to pay that off. You have $"<<thisUser->getCredit()<<" in credit."<<endl;
+                cout<<"You do not have enough credit to pay that off. You have $"<<thisUser->getCredit()<<" in credit."<<endl;
             }
         }
     }
