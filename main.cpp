@@ -535,13 +535,12 @@ void buyTickets(vector<Event*> events, User* thisUser) {
     for (Event* e: events) {
         if (not e->getPrivate() and not thisUser->hasTicket(e->getEventName()) and not (thisUser->getHourly() == 15 and not e->getOpenToNonResidents())) {
             cout<<"Would you like to buy a ticket to "<<e->getEventName()<<" on "<<
-            e->getMonth()<<"/"<<e->getDay()<<" from "<<e->getStartTime()<<" to "<<e->getEndTime()<<" for $"<<e->getTicketCost<<"? (yes or no) ";
+            e->getMonth()<<"/"<<e->getDay()<<" from "<<e->getStartTime()<<" to "<<e->getEndTime()<<" for $"<<e->getTicketCost()<<"? (yes or no) ";
             string choice;
             cin>>choice;
             if (choice == "yes") {
                 if (e->getTicketsRemaining() == 0) {
-                    cout<<"No tickets remaining, adding you to waitlist. Make sure you have $"<<e->getTicketCost()<<" in credit so
-                        we can get you a ticket as soon as a spot opens up!"<<endl;
+                    cout<<"No tickets remaining, adding you to waitlist. Make sure you have $"<<e->getTicketCost()<<" in credit so we can get you a ticket as soon as a spot opens up!"<<endl;
                     e->addToWaitlist(thisUser->getUsername());
                 }
                 else if (thisUser->getCredit() >= e->getTicketCost()) {
@@ -556,19 +555,6 @@ void buyTickets(vector<Event*> events, User* thisUser) {
         }
     }
 }
-void buyTickets(vector<Event*> events, User* thisUser) {
-    if (thisUser->getHourly() == 10) {
-        buyTicketsAsResident(events, thisUser);
-    }
-    else if (thisUser->getHourly() ==  15) {
-        buyTicketsAsNonResident(events, thisUser);
-    }
-    else {
-        cout<<"Cannot buy tickets as a City user"<<endl;
-    }
-}
-
- 
 
 void printMenu(User* thisUser) {
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
@@ -616,7 +602,7 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     buyTickets(events, thisUser);
                     break;
                 case 7:
-                    sellTickets();
+                    //sellTickets();
                     break;
                 case 8:
                     transferMoney(thisUser);
