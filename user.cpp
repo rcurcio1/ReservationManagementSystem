@@ -19,13 +19,11 @@ User::User() { }
 Resident::Resident() { }
 NonResident::NonResident() { }
 City::City() { }
-Manager::Manager() { }
 
 User::~User() { }
 Resident::~Resident() { }
 NonResident::~NonResident() { }
 City::~City() { }
-Manager::~Manager() { }
 
 
 
@@ -74,30 +72,12 @@ string User::getPassword() {
 string User::getUsername() {
     return username;
 }
-bool User::isManager() { 
-    return false;
-}
-bool Manager::isManager() {
-    return true;
-}
-bool City::isManager() {
-    return false;
-}
-bool Resident::isManager() {
-    return false;
-}
-bool NonResident::isManager() {
-    return false;
-}
 
 char User::getSymbol() {
     return ' ';
 }
 char City::getSymbol() {
     return 'C';
-}
-char Manager::getSymbol() {
-    return 'M';
 }
 char Resident::getSymbol() {
     return 'R';
@@ -117,9 +97,6 @@ int Resident::getHourly() {
 }
 int NonResident::getHourly() {
     return 15;
-}
-int Manager::getHourly() {
-    return 0;
 }
 
 void User::removeTicket(string t) {

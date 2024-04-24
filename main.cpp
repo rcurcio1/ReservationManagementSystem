@@ -9,26 +9,29 @@
 #include <fstream>
 using namespace std;
 
-const string MANAGER_USERNAME = "ccmanager13";
-const string MANAGER_PASSWORD = "managerpassword";
 const int TODAY_MONTH = 4;
 const int TODAY_DAY = 23;
 
+const string USER_FILE = "users.txt";
+const string EVENT_FILE = "events.txt";
 
+// Free pointers to users
 void deleteUsers(vector<User*> users) {
     for (User* u : users) {
         delete u;
     }
 }
 
+// Free pointers to events
 void deleteEvents(vector<Event*> events) {
     for (Event* e: events) {
         delete e;
     }
 }
 
+// Save the important information about a user to the file USER_FILE
 void writeUsers(vector<User*> users) {
-    ofstream outfile("users.txt");
+    ofstream outfile(USER_FILE);
     for (int i =0 ; i <users.size(); i++) {
         User* u = users[i];
         outfile<<u->getSymbol()<<" "<<u->getUsername()<<" "<<u->getPassword()<<" "<<u->getCredit();
@@ -41,6 +44,7 @@ void writeUsers(vector<User*> users) {
     outfile.close();
 }
 
+// Returns true if there are multiple users with the same username
 bool duplicateUsers(vector<User*> users) {
     for (int i = 0; i < users.size(); i++) {
         for (int j = i+1; j < users.size(); j++) {
@@ -54,6 +58,7 @@ bool duplicateUsers(vector<User*> users) {
     return false;
 }
 
+// Returns the string form of an event layout
 string getStringFromLayout(Layout l) {
     if (l == WEDDING) {
         return "wedding";
@@ -69,8 +74,9 @@ string getStringFromLayout(Layout l) {
     }
 }
 
+// Save the important information about an event to the file EVENT_FILE
 void writeEvents(vector<Event*> events) {
-    ofstream outfile("events.txt");
+    ofstream outfile(EVENT_FILE);
     for (int i=0; i < events.size(); i++) {
         Event* e = events[i];
         string layoutString = getStringFromLayout(e->getLayout());
@@ -87,10 +93,10 @@ void writeEvents(vector<Event*> events) {
     outfile.close();
 }
 
-
+// Load user information from USER_FILE and create user objects
 vector<User*> initializeUsers() {
     vector<User*> users;
-    ifstream file("users.txt");
+    ifstream file(USER_FILE);
     string line;
     while (getline(file, line)) {
         istringstream iss(line);
@@ -124,6 +130,7 @@ vector<User*> initializeUsers() {
     return users;
 }
 
+// Load event information from EVENT_FILE and create event objects
 vector<Event*> initalizeEvents() {
     vector<Event*> events;
     ifstream file("events.txt");
@@ -138,6 +145,7 @@ vector<Event*> initalizeEvents() {
     return events;
 }
 
+// Return the user that is logged into with their username and password, return nullptr if incorrent login
 User* login(vector<User*> users) {
     string username;
     string password;
@@ -152,13 +160,11 @@ User* login(vector<User*> users) {
             return u;
         }
     }
-    if (username == MANAGER_USERNAME and password == MANAGER_PASSWORD) {
-        return new Manager();
-    }
     cout<<"Incorrect user and password, try again!";
     return nullptr;
 }
 
+// Return true if the given event is within a week of today
 bool withinWeek(Event* e) {
     int month = e->getMonth();
     int day = e->getDay();
@@ -173,28 +179,29 @@ bool withinWeek(Event* e) {
     }
 }
 
+// Print the events for the selected time frame
 void viewEventSchedule(vector<Event*> events) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"Would you like to view events for today, the next week, or all events? (Enter 'day', 'week', or 'all')";
     string selection;
     cin>>selection;
     if (selection == "day") {
-        cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
         for (int i = 0; i < events.size(); i++) {
             Event* e = events[i];
             cout<<e->getMonth()<<" "<<e->getDay()<<endl;
             if (e->getMonth() == TODAY_MONTH and e->getDay() == TODAY_DAY) {
                 e->printEvent();
-                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
             }
         }
     }
     else if (selection == "week") {
-        cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
         for (int i = 0; i < events.size(); i++) {
             Event* e = events[i];
             if (withinWeek(e)) {
                 e->printEvent();
-                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+                cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
             }
         }
     }
@@ -202,12 +209,12 @@ void viewEventSchedule(vector<Event*> events) {
         for (int i = 0; i < events.size(); i++) {
             Event* e = events[i];
             e->printEvent();
-            cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+            cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
         }
     }
 }
 
-
+// Returns the boolean corresponding to the given string
 bool getBoolFromString(string s) {
     if (s == "true" or s == "True") {
         return true;
@@ -217,6 +224,7 @@ bool getBoolFromString(string s) {
     }
 }
 
+// Returns the string representing into a "military" time between 9 and 21
 int getMilitaryTime(string timeString) {
     if (timeString == "9am") {
         return 9;
@@ -260,12 +268,14 @@ int getMilitaryTime(string timeString) {
     return 21;
 }
 
+// Calculate the cost of the given user booking and event between the given times
 int calculateCost(User* thisUser, string startTime, string endTime) {
     int hourly = thisUser->getHourly();
     int hours = getMilitaryTime(endTime) - getMilitaryTime(startTime);
     return hourly * hours + 10;
 }
 
+// Return how many days a given event is from today
 int getDaysAway(Event* e) {
     int days = ((e->getMonth() - TODAY_MONTH) * 30) + (e->getDay() - TODAY_DAY);
     if (days < 0) {
@@ -274,20 +284,12 @@ int getDaysAway(Event* e) {
     return days;
 }
 
-vector<Event*> removeEvent(vector<Event*> events, Event* rem) {
-    vector<Event*> newEvents;
-    for (int i =0; i < events.size(); i++) {
-        Event* e = events[i];
-        if (e != rem) {
-            newEvents.push_back(e);
-        }
-        else {
-            delete e;
-        }
-    }
-    return newEvents;
+// Remove the given event from the vector of events
+void removeEvent(vector<Event*> &events, Event* rem) {
+    events.erase(find(events.begin(), events.end(), rem));
 }
 
+// Refund the cost for an event to the user that booked it
 void refundEventCost(Event* e, vector<User*> users) {
     for (User* u : users) {
         if (u->getUsername() == e->getOrganizer()) {
@@ -298,6 +300,7 @@ void refundEventCost(Event* e, vector<User*> users) {
     }
 }
 
+// Try to reserve the given event with the permissions of a city
 bool tryReserveEventForCity(vector<Event*> &events, vector<User*> users, Event* newEvent) {
     for (int i = 0; i < events.size(); i++) {
         Event* e = events[i];
@@ -315,7 +318,7 @@ bool tryReserveEventForCity(vector<Event*> &events, vector<User*> users, Event* 
                 else {
                     cout<<"Removing event "<<e->getEventName()<<endl;
                     refundEventCost(e, users);
-                    events = removeEvent(events, e);
+                    removeEvent(events, e);
                     delete e;
                 }
             }
@@ -324,6 +327,7 @@ bool tryReserveEventForCity(vector<Event*> &events, vector<User*> users, Event* 
     return true;
 }
 
+// Try to reserve an event with the permissions of a resident or non-resident
 bool tryReserveEventForNonCity(vector<Event*> events, Event* newEvent) {
     for (int i = 0; i < events.size(); i++) {
         Event* e = events[i];
@@ -341,7 +345,10 @@ bool tryReserveEventForNonCity(vector<Event*> events, Event* newEvent) {
     return true;
 }
 
+// Create a new reservation
 void requestReservation(vector<Event*> &events, vector<User*> users, User* thisUser) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"Hi, welcome to the reservation request menu, before making a reservation, there are a few things to note:"<<endl;
     cout<<" -- The facility is open daily from 9am to 9pm"<<endl;
     cout<<" -- Individuals can reserve a maximum of 24 hours in the facility per week"<<endl;
@@ -398,6 +405,10 @@ void requestReservation(vector<Event*> &events, vector<User*> users, User* thisU
         cout<<"Sorry you do not have enough money to cover the service charge, please transfer money to your account and try again!"<<endl;
         return;
     }
+    if (layoutString == "wedding" and thisUser->getHourly() == 5) {
+        cout<<"Sorry, city accounts cannot book events with wedding style!"<<endl;
+        return;
+    }
     Event* e = new Event(eventName, thisUser->getUsername(), month, day, startTime, endTime, isPrivate, openToNonResidents, ticketCost, ticketCount, cost, layoutString);
     e->printEvent();
     if (thisUser->getHourly() == 5) {
@@ -444,35 +455,14 @@ void requestReservation(vector<Event*> &events, vector<User*> users, User* thisU
     }
 }
 
-
-void runManager(vector<User*> users, vector<Event*> events) {
-    while(true) {
-        //printManagerMenu();
-        int choice;
-        cout<<"Enter your selection: ";
-        cin>>choice;
-        switch(choice) {
-            case 1:
-                return;
-            case 2:
-                viewEventSchedule(events);
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-        }
-    }
-}
-
+// Make good an outstanding payment on an event that this user booked
 void makePayment(vector<Event*> events, User* thisUser) {
+    bool noPayments = true;
     for (Event* e: events) {
         if (e->getOrganizer() == thisUser->getUsername() and e->getAmountOwed() > 0) {
-            cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+            noPayments = false;
+            cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+            cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
             cout<<"You owe $"<<e->getAmountOwed()<<" for the event "<<e->getEventName()<<"."<<endl;
             cout<<"How much of that amount would you like to pay off? ";
             int pay;
@@ -490,10 +480,15 @@ void makePayment(vector<Event*> events, User* thisUser) {
             }
         }
     }
+    if (noPayments) {
+        cout<<"No outstanding payments!"<<endl;
+    }
 }
 
+// Add credit to this user's account
 void transferMoney(User* thisUser) {
-    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"Enter amount to transfer into your account: ";
     int amount;
     cin>>amount;
@@ -505,10 +500,15 @@ void transferMoney(User* thisUser) {
     }
 }
 
+// Cancel an event that you booked
 void cancelEvent(vector<Event*> &events, vector<User*> users, User* thisUser) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    bool noEvents = true;
     for (int i=0; i <events.size(); i++) {
         Event* e = events[i];
         if (e->getOrganizer() == thisUser->getUsername()) {
+            noEvents = false;
             cout<<"Would you like to cancel "<<e->getEventName()<<"? (yes or no) ";
             string choice;
             cin>>choice;
@@ -526,14 +526,23 @@ void cancelEvent(vector<Event*> &events, vector<User*> users, User* thisUser) {
             }
         }
     }
+    if (noEvents) {
+        cout<<"No events for you to cancel!"<<endl;
+    }
 }
+
+// Buy tickets for a confirmed event
 void buyTickets(vector<Event*> events, User* thisUser) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     if (thisUser->getHourly() == 5) {
         cout<<"Cannot buy tickets as a City user!"<<endl;
         return;
     }
+    bool noEvents = true;
     for (Event* e: events) {
-        if (not e->getPrivate() and not thisUser->hasTicket(e->getEventName()) and not (thisUser->getHourly() == 15 and not e->getOpenToNonResidents())) {
+        if (e->getConfirmed() and not e->getPrivate() and not thisUser->hasTicket(e->getEventName()) and not (thisUser->getHourly() == 15 and not e->getOpenToNonResidents())) {
+            noEvents = false;
             cout<<"Would you like to buy a ticket to "<<e->getEventName()<<" on "<<
             e->getMonth()<<"/"<<e->getDay()<<" from "<<e->getStartTime()<<" to "<<e->getEndTime()<<" for $"<<e->getTicketCost()<<"? (yes or no) ";
             string choice;
@@ -554,8 +563,13 @@ void buyTickets(vector<Event*> events, User* thisUser) {
             }
         }
     }
+    if (noEvents) {
+        cout<<"There are no events currently available for you to book! This could be because of your"<<endl;
+        cout<<"resident status, becuase you already have a ticket to all events, or there just are not any events!"<<endl;
+    }
 }
 
+// Try to give a ticket to a user from the waitlist if they can afford it
 bool giveUserTicket(vector<User*> users, Event* e, string waitlistUser) {
     for (User* u : users) {
         if (u->getUsername() == waitlistUser) {
@@ -574,9 +588,14 @@ bool giveUserTicket(vector<User*> users, Event* e, string waitlistUser) {
     return false;
 }
 
+// Sell a ticket that you have already bought
 void sellTickets(vector<Event*> events, vector<User*> users, User* thisUser) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+    bool noTickets = true;
     for (Event* e: events) {
         if (thisUser->hasTicket(e->getEventName())) {
+            noTickets = false;
             cout<<"Would you like to sell your ticket to "<<e->getEventName()<<" on "<<
             e->getMonth()<<"/"<<e->getDay()<<" from "<<e->getStartTime()<<" to "<<
             e->getEndTime()<<" for $"<<e->getTicketCost()<<"? (yes or no) ";
@@ -596,9 +615,14 @@ void sellTickets(vector<Event*> events, vector<User*> users, User* thisUser) {
             }
         }
     }
+    if (noTickets) {
+        cout<<"You do not have any tickets to sell!"<<endl;
+    }
 }
 
+// Print the main menu
 void printMenu(User* thisUser) {
+    cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"CREDIT: $"<<thisUser->getCredit()<<endl;
     cout<<"1. Quit program"<<endl;
@@ -612,6 +636,7 @@ void printMenu(User* thisUser) {
     cout<<"9. Logout"<<endl;
 }
 
+// Run the program
 void run(vector<User*> &users, vector<Event*> &events) {
     while(true) {
         User* thisUser = nullptr;
@@ -647,8 +672,10 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     break;
                 case 8:
                     transferMoney(thisUser);
+                    break;
                 case 9:
                     loggedIn = false;
+                    break;
             }
         }
     }
@@ -656,7 +683,7 @@ void run(vector<User*> &users, vector<Event*> &events) {
 
 
 
-
+// Main
 int main() {
     vector<User*> users = initializeUsers();
     if (duplicateUsers(users)) {
