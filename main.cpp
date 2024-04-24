@@ -1,6 +1,7 @@
 #include "user.hpp"
 #include "event.hpp"
 #include <vector>
+#include <algorithm>
 #include <deque>
 #include <string>
 #include <sstream>
@@ -505,20 +506,24 @@ void transferMoney(User* thisUser) {
 }
 
 void cancelEvent(vector<Event*> &events, vector<User*> users, User* thisUser) {
-    for (Event* e : events) {
-        cout<<"Would you like to cancel "<<e->getEventName()<<"? (yes or no)";
-        string choice;
-        cin>>choice;
-        if (choice == "yes") {
-            for (User* u : users) {
-                vector<string> tickets = u->getTickets();
-                if (find(tickets.begin(), tickets.end(), e->getEventName()) != tickets.end()) {
-                    tickets.erase(find(tickets.begin(), tickets.end(), e->getEventName()));
-                    u->changeCredit(e->getTicketCost());
+    for (int i=0; i <events.size(); i++) {
+        Event* e = events[i];
+        if (e->getOrganizer() == thisUser->getUsername()) {
+            cout<<"Would you like to cancel "<<e->getEventName()<<"? (yes or no) ";
+            string choice;
+            cin>>choice;
+            if (choice == "yes") {
+                for (User* u : users) {
+                    vector<string> tickets = u->getTickets();
+                    if (find(tickets.begin(), tickets.end(), e->getEventName()) != tickets.end()) {
+                        tickets.erase(find(tickets.begin(), tickets.end(), e->getEventName()));
+                        u->changeCredit(e->getTicketCost());
+                    }
                 }
+                events.erase(find(events.begin(), events.end(), e));
+                delete e;
+                i--;
             }
-            events.erase(find(events.begin(), events.end(), e));
-            delete e;
         }
     }
 }
