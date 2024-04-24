@@ -559,14 +559,14 @@ void buyTickets(vector<Event*> events, User* thisUser) {
 bool giveUserTicket(vector<User*> users, Event* e, string waitlistUser) {
     for (User* u : users) {
         if (u->getUsername() == waitlistUser) {
-            if (e->getCredit() >= e->getTicketCost()) {
+            if (u->getCredit() >= e->getTicketCost()) {
                 u->addTicket(e->getEventName());
                 u->changeCredit(e->getTicketCost());
                 e->sellTicket();
                 return true;
             }
             else {
-                cout<<"Unable to give "<<e->getUsername()<<" their ticket from wailist (insufficient funds)!"<<endl;
+                cout<<"Unable to give "<<u->getUsername()<<" their ticket from wailist (insufficient funds)!"<<endl;
                 return false;
             }
         }
@@ -584,7 +584,7 @@ void sellTickets(vector<Event*> events, vector<User*> users, User* thisUser) {
             cin>>choice;
             if (choice == "yes") {
                 thisUser->removeTicket(e->getEventName());
-                thisUser->changeCredit(e->getTicketCost);
+                thisUser->changeCredit(e->getTicketCost());
                 e->returnTicket();
                 if (e->getWaitlist().size() > 0) {
                     bool foundWaitlistUser = false;
@@ -643,7 +643,7 @@ void run(vector<User*> &users, vector<Event*> &events) {
                     buyTickets(events, thisUser);
                     break;
                 case 7:
-                    sellTickets();
+                    sellTickets(events, users, thisUser);
                     break;
                 case 8:
                     transferMoney(thisUser);

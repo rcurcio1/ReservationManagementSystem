@@ -1,3 +1,3 @@
 C CityRec password 0
-R rosscurcio password2 455 Wednesday Graduation
-N joecurcio password3 15
+R rosscurcio password2 470 Wednesday
+N joecurcio password3 0 Graduation
