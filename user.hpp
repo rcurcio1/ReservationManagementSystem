@@ -37,6 +37,8 @@ public:
     virtual char getSymbol(); 
     // Return how much the user type has to pay per hour for an event
     virtual int getHourly();
+    // Return whether this user type can book weddings
+    virtual bool canBookWeddings();
 };
 
 // Child class representing a resident of the community
@@ -49,6 +51,7 @@ public:
     friend istringstream& operator>>(istringstream& input, Resident& obj);
     char getSymbol() override; 
     int getHourly() override;
+    bool canBookWeddings() override;
 };
 
 // Child class representing someone who is not a resident of the community
@@ -61,6 +64,7 @@ public:
     friend istringstream& operator>>(istringstream& input, NonResident& obj);
     char getSymbol() override; 
     int getHourly() override;
+    bool canBookWeddings() override;
 };
 
 // Child class representing an account made on behalf of the city
@@ -73,6 +77,7 @@ public:
     friend istringstream& operator>>(istringstream& input, City& obj);
     char getSymbol() override; 
     int getHourly() override;
+    bool canBookWeddings() override;
 };
 
 #endif

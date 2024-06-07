@@ -99,6 +99,16 @@ int NonResident::getHourly() {
     return 15;
 }
 
+bool City::canBookWeddings() {
+    return false;
+}
+bool Resident::canBookWeddings() {
+    return true;
+}
+bool NonResident::canBookWeddings() {
+    return true;
+}
+
 void User::removeTicket(string t) {
     tickets.erase(find(tickets.begin(), tickets.end(), t));
 }

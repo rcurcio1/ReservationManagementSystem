@@ -346,8 +346,8 @@ bool tryReserveEventForNonCity(vector<Event*> events, Event* newEvent) {
     return true;
 }
 
-// Create a new reservation
-void requestReservation(vector<Event*> &events, vector<User*> users, User* thisUser) {
+// Print the menu for the reservation requests
+void printRequestMenu() {
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout<<"Hi, welcome to the reservation request menu, before making a reservation, there are a few things to note:"<<endl;
@@ -359,6 +359,11 @@ void requestReservation(vector<Event*> &events, vector<User*> users, User* thisU
     cout<<" -- Reservations made by individuals over 7 days in advance may be overrode by City reservations"<<endl;
     cout<<"    if they have not been confirmed"<<endl;
     cout<<" -- To confirm a reservation, it must be paid in full or it must be within 7 days of the event"<<endl;
+}
+
+// Create a new reservation
+void requestReservation(vector<Event*> &events, vector<User*> users, User* thisUser) {
+    printRequestMenu();
     cout<<"Enter event name: ";
     string eventName;
     cin>>eventName;
@@ -405,7 +410,7 @@ void requestReservation(vector<Event*> &events, vector<User*> users, User* thisU
         cout<<"Sorry you do not have enough money to cover the service charge, please transfer money to your account and try again!"<<endl;
         return;
     }
-    if (layoutString == "wedding" and thisUser->getHourly() == 5) {
+    if (layoutString == "wedding" and !thisUser->canBookWeddings()) {
         cout<<"Sorry, city accounts cannot book events with wedding style!"<<endl;
         return;
     }
