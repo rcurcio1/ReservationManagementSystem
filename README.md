@@ -8,6 +8,7 @@ At the beginning of the porgram you will be prompted to login with a username an
 | City      | CityRec  | password |
 | Resident  | rosscurcio | password2 |
 | Non-Resident | joecurcio | password3 |
+
 To add more users, edit the "users.txt" file.
 ## Implementation Details
 ### Confirmation
