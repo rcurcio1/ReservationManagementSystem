@@ -43,7 +43,7 @@ Users are saved automatically in "users.txt", but that can be changed by using t
 4. Credit (int)
 5. Any number of event names that the user has tickets for
 # Running the Program
-The program gives great instructions for how to user it within the program, so below is just a general outline of what each function does.
+The program gives great instructions for how to use it within the program, so below is just a general outline of what each function does.
 ## Login
 Use the login information above to log in to the program as a specific user. 
 ## Menu
